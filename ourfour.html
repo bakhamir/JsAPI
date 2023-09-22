@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>adieu</title> 
+<style>
+.subbuton{position: absolute;}
+</style>
+</head>       
+<body>  
+
+    <p id = "namee"></p>
+    <!-- <p id = "time"></p> -->
+    <p id = "desc"></p>
+    <img src = "" id = "icon">
+    <p id = "temp"></p>
+    <p id = "tempmax"></p>
+    <p id = "tempmin"></p>
+    <p id = "windspeed"></p>
+    
+    <button id = "weatherbutton">see weather</button>
+    <button id = "pollutionbutton">see pollution</button>
+    <p id = "co2"></p>
+    <p id = "o3"></p>
+    <p id = "s02"></p>
+<script>
+    var lat = prompt()
+    var lon = prompt()
+        weatherbutton.addEventListener("click",function(){
+            console.log(1)
+        var now = new Date();
+        const xlr = new XMLHttpRequest();
+        xlr.open("GET","https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon +"&appid=14e21eadaa6e32f8824e0f93e5191c5d")
+        xlr.onload = () =>{ 
+            console.log(xlr)
+            var response = JSON.parse(xlr.response);
+            console.log(response)
+            namee.innerText = response.name
+            // time.innerText = now
+            desc.innerText = response.weather[0].description
+            icon.src = "https://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png"
+            temp.innerText = Math.floor(response.main.temp - 273) + " градусов по цельсию"
+            tempmax.innerText = Math.floor(response.main.temp_max - 273)+ "градусов по цельсию"
+            tempmin.innerText = Math.floor(response.main.temp_min - 273)+ "градусов по цельсию"
+            windspeed.innerText = response.wind.speed  + " м/c" 
+        
+        }
+        xlr.send()
+        }
+    )
+    pollutionbutton.addEventListener("click",function(){
+        const xlr = new XMLHttpRequest();
+        xlr.open("GET","http://api.openweathermap.org/data/2.5/air_pollution?lat=" + lat+ "&lon=" + lon + "&appid=14e21eadaa6e32f8824e0f93e5191c5d")
+        xlr.onload = () =>{ 
+            console.log(xlr)
+            var response = JSON.parse(xlr.response);
+            console.log(response)
+            co2.innerText = response.list[0].components.co + " co"
+            o3.innerText = response.list[0].components.o3 + " co"
+            s02.innerText = response.list[0].components.so2 + " so2"
+        }
+        xlr.send()
+    })
+
+
+
+</script>
+
+</body>
+</html>
